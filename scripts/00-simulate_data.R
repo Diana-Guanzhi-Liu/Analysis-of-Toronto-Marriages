@@ -23,7 +23,8 @@ simulated_marriage_data <-
     Marriage_licenses =
       round(runif(n = 12, min = 0, max = 2000))
   )
-
+# simulate deviations from an uniform distribution of the number of marriage
+# licenses obtained in Toronto over 12 months
 simulated_marriage_data
 
 
