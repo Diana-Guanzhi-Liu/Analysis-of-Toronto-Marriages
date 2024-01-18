@@ -1,44 +1,44 @@
 #### Preamble ####
-# Purpose: Cleans the raw plane data recorded by two observers..... [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 6 April 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
-# License: MIT
-# Pre-requisites: [...UPDATE THIS...]
-# Any other information needed? [...UPDATE THIS...]
+# Purpose: Cleans the raw marriage data
+# Author: Diana Liu
+# Date: 16 January 2024
+# Contact: guanzhi.liu@mail.utoronto.ca
+# Pre-Requisits: unedited data is downloaded
 
 #### Workspace setup ####
+# install.packages("tidyverse")
+# install.packages("stringr")
+# comment out installations after they are done
 library(tidyverse)
+library(stringr)
 
 #### Clean data ####
-raw_data <- read_csv("inputs/data/plane_data.csv")
+raw_marriages_data <- read_csv("inputs/data/unedited_data.csv")
 
-cleaned_data <-
-  raw_data |>
-  janitor::clean_names() |>
-  select(wing_width_mm, wing_length_mm, flying_time_sec_first_timer) |>
-  filter(wing_width_mm != "caw") |>
-  mutate(
-    flying_time_sec_first_timer = if_else(flying_time_sec_first_timer == "1,35",
-                                   "1.35",
-                                   flying_time_sec_first_timer)
-  ) |>
-  mutate(wing_width_mm = if_else(wing_width_mm == "490",
-                                 "49",
-                                 wing_width_mm)) |>
-  mutate(wing_width_mm = if_else(wing_width_mm == "6",
-                                 "60",
-                                 wing_width_mm)) |>
-  mutate(
-    wing_width_mm = as.numeric(wing_width_mm),
-    wing_length_mm = as.numeric(wing_length_mm),
-    flying_time_sec_first_timer = as.numeric(flying_time_sec_first_timer)
-  ) |>
-  rename(flying_time = flying_time_sec_first_timer,
-         width = wing_width_mm,
-         length = wing_length_mm
-         ) |> 
-  tidyr::drop_na()
+cleaned_marriages_data <-
+  raw_marriages_data |>
+  select(CIVIC_CENTRE, MARRIAGE_LICENSES, TIME_PERIOD) |> # we want to select 
+  #only the relevant columns: civic_centre, marriage_licenses, and time_period
+  filter(CIVIC_CENTRE == "TO", TIME_PERIOD >= 2023) # We are only interested in
+# Toronto so we filter on TO to get rid of Etobicoke (ET), North York (NY), 
+# and Scarborough (SC)
+# Then we filter on the year because we are only interested in 2023
+
+cleaned_marriages_data$TIME_PERIOD <- str_c(cleaned_marriages_data$TIME_PERIOD,
+                                            "-01")
+# We add -01 to the end of the dates so they are formatted correctly as 
+# yyyy-mm-dd
+
+cleaned_marriages_data <-
+  cleaned_marriages_data |>
+  mutate(TIME_PERIOD = format(as.Date(TIME_PERIOD), format="%B")) |>
+  rename(Month = TIME_PERIOD, Marriages = MARRIAGE_LICENSES) |>
+  select(Month, Marriages)
+# Then we change the date format to only the month, rename the column so they
+# are easier to understand, and get rid of the CIVIC_CENTRE column
+
+head(cleaned_marriages_data)
+
 
 #### Save data ####
-write_csv(cleaned_data, "outputs/data/analysis_data.csv")
+write_csv(cleaned_marriages_data, "outputs/data/cleaned_data.csv")
