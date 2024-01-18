@@ -18,3 +18,4 @@ marriage_data$Marriages |> min() >= 0
 marriage_data$Marriages |> max() <= 2000
 marriage_data$Marriages |> class() == 'numeric'
 marriage_data$Month |> class() == 'character'
+
