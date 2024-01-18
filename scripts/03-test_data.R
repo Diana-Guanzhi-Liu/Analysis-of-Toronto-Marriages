@@ -1,15 +1,20 @@
 #### Preamble ####
-# Purpose: Tests... [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 11 February 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
-# License: MIT
-# Pre-requisites: [...UPDATE THIS...]
-# Any other information needed? [...UPDATE THIS...]
+# Purpose: Tests cleaned toronto marriage data
+# Author: Diana Liu
+# Date: 17 January 2024
+# Contact: guanzhi.liu@mail.utoronto.ca
+# Pre-requisites: downloaded and cleaned toronto marriage data
 
 
 #### Workspace setup ####
+# install.packages("tidyverse")
+# We can comment out the installation after tidyverse has been installed
 library(tidyverse)
-# [...UPDATE THIS...]
 
 #### Test data ####
+marriage_data <- read_csv("outputs/data/cleaned_data.csv")
+
+marriage_data$Marriages |> min() >= 0
+marriage_data$Marriages |> max() <= 2000
+marriage_data$Marriages |> class() == 'numeric'
+marriage_data$Month |> class() == 'character'
