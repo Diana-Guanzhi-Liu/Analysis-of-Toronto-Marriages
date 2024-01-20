@@ -19,8 +19,8 @@ cleaned_marriages_data <-
   raw_marriages_data |>
   select(CIVIC_CENTRE, MARRIAGE_LICENSES, TIME_PERIOD) |> # we want to select 
   #only the relevant columns: civic_centre, marriage_licenses, and time_period
-  filter(TIME_PERIOD >= 2023)
-# Then we filter on the year because we are only interested in 2023
+  filter(CIVIC_CENTRE == "TO")
+# Then we filter on the civic centre so that we are only left with Toronto
 
 cleaned_marriages_data$TIME_PERIOD <- str_c(cleaned_marriages_data$TIME_PERIOD,
                                             "-01")
@@ -29,15 +29,24 @@ cleaned_marriages_data$TIME_PERIOD <- str_c(cleaned_marriages_data$TIME_PERIOD,
 
 cleaned_marriages_data <-
   cleaned_marriages_data |>
-  mutate(TIME_PERIOD = format(as.Date(TIME_PERIOD), format="%B")) |>
-  rename(Month = TIME_PERIOD, Marriages = MARRIAGE_LICENSES, Civic_Centre = CIVIC_CENTRE) |>
-  select(Month, Marriages, Civic_Centre)
-# Then we change the date format to only the month, rename the column so they
-# are easier to understand, and get rid of the CIVIC_CENTRE column
-
+  rename(Date = TIME_PERIOD, Marriages = MARRIAGE_LICENSES) |>
+  select(Date, Marriages) |>
+  filter(Date >= as.Date("2022-01-01"))
+# We get rid of the CIVIC_CENTRE column and look at the last two years
 head(cleaned_marriages_data)
+
+cleaned_marriages_data_2022 <-
+  cleaned_marriages_data |>
+  filter(Date >= as.Date("2022-01-01"), Date <= as.Date("2022-12-31"))
+head(cleaned_marriages_data_2022)
+
+cleaned_marriages_data_2023 <-
+  cleaned_marriages_data |>
+  filter(Date >= as.Date("2023-01-01"), Date <= as.Date("2023-12-31"))
+head(cleaned_marriages_data_2023)
 
 
 #### Save data ####
-write_csv(cleaned_marriages_data, "outputs/data/cleaned_data.csv")
-
+write_csv(cleaned_marriages_data, "outputs/data/cleaned_data_all_years.csv")
+write_csv(cleaned_marriages_data_2022, "outputs/data/cleaned_data_2022.csv")
+write_csv(cleaned_marriages_data_2023, "outputs/data/cleaned_data_2023.csv")
