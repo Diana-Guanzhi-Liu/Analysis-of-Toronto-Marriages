@@ -1,9 +1,9 @@
 ---
-title: "Getting Hitched: Torontonians Prefer to Get Married During Warm Weather"
+title: "Torontonians Prefer to Get Married in the Warmer Half of the Year"
 author: Diana Liu
 thanks: "Code and data are available at: https://github.com/Diana-Guanzhi-Liu/Analysis-of-Toronto-Marriages"
 date: 25 January 2024
-abstract: "We examine marriage licenses obtained in the city of Toronto in the year 2022 and 2023 by months. By dividing the year into warm months (April, May, June, July, August, September) and cold months (October, November, December, January, Febuary, March), the number of marriage licenses obtained in Toronto increase significantly during warm months, supporting the hypothesis that Torontonians prefer to get married during warm weather."
+abstract: "We examine marriage licenses obtained in the city of Toronto in the year 2022 and 2023 by months, dividing the year into warm months (April, May, June, July, August, September) and cold months (October, November, December, January, Febuary, March). We found that the number of marriage licenses obtained in 2022 increased by 117% between cold and warm months and 68% in 2023. This supports our hypothesis that Torontonians prefer to get married during the warmer half of the year."
 format: pdf
 number-sections: true
 bibliography: references.bib
@@ -29,7 +29,7 @@ In the Data section, we download marriage license data from opendatatoronto(@cit
 
 We formulate our hypothesis to be that there are more marriage licenses obtained in warm months of April to September than cold months of October to March because Torontonians prefer to get married during the warmer half of the year. We analyzed the data in the Results section by plotting the number of licenses against the month in which they were obtained so we can see the change in the number of marriage licenses from month to month. Since there are only 12 data points in each graph, we are also able to label each observation with the exact number of marriage licenses issued. Then we calculated the total amount and the average amount of marriage licenses in the warm months and cold months of each year, and the percent change between them. Our results show that our hypothesis is correct with the number of marriage licenses steadily increasing from February to May, peaking around July, then decreasing between September and November before hitting its lowest in January. This cyclic nature can be observed for both 2022 and 2023.
 
-*** Discussion Section
+*insert discussion in intro
 
 
 # Data {#sec-data}
