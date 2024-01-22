@@ -1,9 +1,9 @@
 ---
 title: "Getting Hitched: Torontonians Prefer to Get Married During Warm Weather"
 author: Diana Liu
-thanks: "Code and data are available at: https://github.com/Diana-Guanzhi-Liu/Term-Paper-1."
+thanks: "Code and data are available at: https://github.com/Diana-Guanzhi-Liu/Analysis-of-Toronto-Marriages"
 date: 25 January 2024
-abstract: "We examine marriage licenses obtained in the city of Toronto in the year 2023 by months. By dividing the year into warm months (April, May, June, July, August, September) and cold months (October, November, December, January, Febuary, March), the number of marriage licenses obtained in Toronto increase significantly during warm months, supporting the hypothesis that Torontonians prefer to get married during warm weather. Further analysis should be conducted to determine whether or not this results in longer wait times for marriage licenses and more expensive ceremonies as demand is higher during the peak season."
+abstract: "We examine marriage licenses obtained in the city of Toronto in the year 2022 and 2023 by months. By dividing the year into warm months (April, May, June, July, August, September) and cold months (October, November, December, January, Febuary, March), the number of marriage licenses obtained in Toronto increase significantly during warm months, supporting the hypothesis that Torontonians prefer to get married during warm weather."
 format: pdf
 number-sections: true
 bibliography: references.bib
@@ -13,69 +13,125 @@ bibliography: references.bib
 #| include: false
 #| warning: false
 #| message: false
-
 library(opendatatoronto)
 library(tidyverse)
 library(dplyr)
 library(stringr)
 library(ggplot2)
+library(tinytex)
+library(gt)
 ```
-
 
 # Introduction
-According to @citebusinessinsider, summer is the hottest time to get married due to more dress options, the option to have an outdoor wedding, and relatively easier travel among other reasons, but is this actually true for a city like Toronto? Toronto is a city known for cold weather in the winter with snow from October to March (@citeurbanclimate). This means that we expect the amount of marriage licenses obtained in Toronto should increase during the warm months of April through September and decrease during the cold months of October through March.
+According to @citebusinessinsider, summer is the hottest time to get married due to more dress options, the opportunity to have an outdoor wedding, and relatively easier travel among other reasons, but is this actually true in Toronto? Toronto is a city known for cold weather in the winter with snow from October to March (@citeurbanclimate). This means that we expect the amount of marriage licenses obtained in Toronto should increase during the warm months of April through September and decrease during the cold months of October through March. By knowing whether or not more marriages occur during the summer months, prospective couples in Toronto can plan ahead and avoid peak seasons for applying for a marriage license and any delays that result.  
 
-In order to test this hypothesis, we download marriage license data from opendatatoronto, a database maintained by the City of Toronto and analyze the data by plotting the number of licenses against the month in which they were obtained. Our results show that our hypothesis is correct with the number of marriage licenses steadily increasing from Febuary to May, peaking in August, then decreasing between August and November before hitting its lowest in January. This cyclic nature can be observed for the prior 2 years as well.  
-```{r}
-#| echo: false
-#| message: false
+In the Data section, we download marriage license data from opendatatoronto(@citeopendata), a database maintained by the City of Toronto. This dataset features the number of marriage licenses issued in Toronto by month, beginning January 1 2011. We will be looking at data from 2023 and 2022, as well as any changes in the number of marriage licenses between the two years.
 
-marriage_data <- read_csv("/cloud/project/outputs/data/cleaned_data.csv")
-print(marriage_data)
-```
+In order to test this hypothesis, we analyzed the data in the Results section by plotting the number of licenses against the month in which they were obtained and connecting the points with a line so we can see the change in the number of marriage licenses from month to month more clearly. Since there are only 12 data points in each graph, we are also able to lable each observation with the exact number of marriage licenses issued. Then we calculate *****
 
+Our results show that our hypothesis is correct with the number of marriage licenses steadily increasing from Febuary to May, peaking in August, then decreasing between August and November before hitting its lowest in January. This cyclic nature can be observed for both 2022 and 2023
 
 
 # Data {#sec-data}
-Our data is Marriage Licence Statistics from Open Data Toronto (@opendatatoronto) which contains data sets maintained by the City of Toronto. The Marriage Licence Statistics dataset consists of monthly number of marriage licenses obtained from 2011 to 2023 in the Greater Toronto Area, it was last updated 2024-01-14. No similar data sets could have been used because this dataset is the only one of marriage licences. The Marriage Licence Statistics dataset contains only four variables: x_id, civic centres, marriage licenses, and date, but only civic centres, marriage licenses, and date were used in our analysis. The data was cleaned and analysed using the statistical software R (@R) with the assistance of tidyverse (@tidy), dyplr (@dyplr), ggplot2(@citeggplot2), and stringr (@stringr).
+Our data is Marriage Licence Statistics from Open Data Toronto (@citeopendata) which contains data sets maintained by the City of Toronto. The Marriage Licence Statistics dataset consists of monthly number of marriage licenses obtained from 2011 to 2023 in the Greater Toronto Area, it was last updated 2024-01-14. No similar data sets could have been used because this dataset is the only one of marriage licences. Looking at (@fig-raw_toronto_marriages), the Marriage Licence Statistics dataset contains only four variables: x_id, civic centres, marriage licenses, and date, but only civic centres, marriage licenses, and date were used in our analysis. The data was cleaned and analysed using the statistical software R (@citeR) with the assistance of tidyverse (@citetidy), dyplr (@citedyplr), ggplot2 (@citeggplot2), tinytex (@citetiny), gt (@citegt), and stringr (@stringr).
 
-## Civic Centres
-CIVIC_CENTRE is a column a two letter abbreviation of the city in which the marriage licenses are issued, ET for Etobicoke NY for North York, SC for Scarborough, and TO for Toronto. Each civic centre has its own row of corresponding date, number of marriage licenses, and id. During the data cleaning process, we filter out ET, NY, and SC so we can focus on Toronto. After filtering, we will not need the variable anymore. 
+We selected the past two years due to some 2021 data being missing and the fact that Covid-19 in 2020 caused a significant decrease in the number of marriage licenses that were obtained all year compared to other years (@citesage).
+
 ```{r}
+#| label: fig-raw_toronto_marriages
+#| fig-cap: Sample of Raw Marriage License Data in Toronto
 #| echo: false
 #| message: false
 
 raw_marriage_data <- read_csv("/cloud/project/inputs/data/unedited_data.csv")
-head(raw_marriage_data)
+gt(head(raw_marriage_data))
+
 ```
 
+## Civic Centres
+CIVIC_CENTRE is the second column in @fig-raw_toronto_marriages and contains a two letter abbreviation of the city in which the marriage licenses are issued, ET for Etobicoke, NY for North York, SC for Scarborough, and TO for Toronto. Each civic centre has its own row of corresponding date, number of marriage licenses, and id. During the data cleaning process, we filter out ET, NY, and SC so we can focus on Toronto. After filtering, we will not need the variable anymore (@fig-cleaned_toronto_marriages). 
+
 ## Marriage Licenses
-MARRIAGE_LICENSES is the variable denoting how many licenses were obtained each month, with a max of 1649 certificates obtained, min of 563, and average of 1058.8 in Toronto in 2023. Marriage licenses are obtained in the province of Ontario via an online application process followed by an in-person appointment at the Toronto City Hall. The actual wedding ceremony is irrelevant for obtaining a marriage license.  
+MARRIAGE_LICENSES is the 3rd column in @fig-raw_toronto_marriages and denotes how many licenses were obtained. It is important to note that obtaining a marriage license is separate from the wedding ceremony itself, but the two often take place consecutively because a marriage license is required in the province of Ontario to become legally married (@citetorontomarriage).
+
+There are 12 observations per year for each month (@fig-cleaned_toronto_marriages_2022). This makes 24 observations for 2022-23 between 472 and 1758, with an average of 1043.3 marriage licenses obtained. 
+
+
+## Date (Month)
+TIME_PERIOD is the month in which the marriage licenses were obtained in a yyyy-mm date format. When we clean the data, we must add a -dd to the end of each date value in order for the dates to be in an unambiguous format. Then the date is filtered by year to separate 2022 and 2023 from the rest of the dataset.
+
+## Cleaned Data
+After the data we need has been cleaned, it is saved into 3 .csv files, one for 2022 and another for 2023, both of which have 12 observations one for each month. The third .csv file conains both years and has 24 observations. The only columns that remain in any file are Date and Marriages (@fig-cleaned_toronto_marriages_2022).
+
 ```{r}
+#| label: fig-cleaned_toronto_marriages_2022
+#| fig-cap: Sample of Cleaned Marriage License Data in Toronto by Month in 2022
 #| echo: false
 #| message: false
 
-marriage_data <- read_csv("/cloud/project/outputs/data/cleaned_data.csv")
-
-head(marriage_data)
-summary(marriage_data$Marriages)
+cleaned_marriage_data_2022 <- read_csv("/cloud/project/outputs/data/cleaned_data_2022.csv")
+gt(head(cleaned_marriage_data_2022))
 ```
- 
-## Date (Month)
-TIME_PERIOD is the month in which the marriage licenses were obtained in a yyyy-mm date format. When we clean the data, the date is filtered by year to retain only 2023 information, then it is reformatted so that it is the name of the month (e.g. 'January')
-
-
 
 
 # Results
-
-
+In order to determine if there is a difference in the amount of marriage licenses issued in Toronto between warm months (April to September) compared to cold months (October to March), we plot the number of marriage licenses for each month separately for 2022, 2023 and both years together. Then the ploints are connected with a path line to make the shape of changes over time easier to see. It is important to note that the lines in the graphs do not represent the actual rate of change between months because there is only one observation for each month. 
+## 2022 Marriage Licenses
+(@fig-2022_marriages)
 ```{r}
+#| label: fig-2022_marriages
+#| fig-cap: Number of marriage licenses issued in Toronto in 2022
 #| echo: false
-marriage_data <- read_csv("/cloud/project/outputs/data/cleaned_data.csv")
+#| message: false
+#| eval: true
+#| warning: false
+marriage_data <- read_csv("/cloud/project/outputs/data/cleaned_data_2022.csv")
 
 marriage_data |>
-  ggplot(aes(x = Month, y = Marriages, label = Marriages)) +
+  ggplot(aes(x = Date, y = Marriages, label = Marriages)) +
+  geom_point() +
+  geom_path(color = "red") +
+  geom_text(hjust=0, vjust=0) +
+  theme(axis.text.x = element_text(angle = 0, vjust = 0.5)) +
+  labs(x = "Month", y = "Marriages", color = "Country")
+```
+```{r}
+#| echo: false
+#| message: false
+#| include: false
+marriage_data_2022 <- read_csv("/cloud/project/outputs/data/cleaned_data_2022.csv")
+summary(marriage_data_2022$Marriages)
+sum(marriage_data_2022$Marriages)
+```
+
+We used ggplot to plot each marriage license observation for each month, then we connected the points so the trend over time is easier to observe. Looking at @fig-2022_marriages, we can see that January has the lowest amount marriage licenses being issued of 472. A slight increase of 62 licenses occurs in February, followed by an increase in in March of 684, more than doubling the amount in February. Then there is a slight plateau for 3 months before another increase to 1658 licenses in June, this is also the max in 2022 and a $1658/472\approx350\%$increase since January. There is another plateau which ends in September when the number of licenses falls to 1108. This decrease continues to October where the number if licenses plateau once again around 500.
+
+When we examine our graph separated into warm months (April, May, June, July, August, September) and cold months (October, November, December, January, February, March), we can see that there is a 219% increase between the number of marriage licenses in cold and warm months 
+$$
+Total\ Marriages\ Warm\ Months\ 2022\\
+1265+1269+1658+1507+1656+1108=8463
+\\
+Average=1410.5
+\\
+Total\ Marriages\ Cold\ Months\ 2022\\
+611+476+556+472+536+1220=3871
+\\
+Average=645.2
+\\
+$$
+
+## 2023
+```{r}
+#| label: fig-2023_marriages
+#| fig-cap: Number of marriage licenses issued in Toronto in 2023
+#| echo: false
+#| message: false
+#| eval: true
+#| warning: false
+marriage_data <- read_csv("/cloud/project/outputs/data/cleaned_data_2023.csv")
+
+marriage_data |>
+  ggplot(aes(x = Date, y = Marriages, label = Marriages)) +
   geom_point() +
   geom_path(color = "red") +
   geom_text(hjust=0, vjust=0) +
@@ -83,15 +139,50 @@ marriage_data |>
   labs(x = "Month", y = "Marriages", color = "Country")
 ```
 
+```{r}
+#| echo: false
+#| message: false
+#| include: false
+marriage_data_2023 <- read_csv("/cloud/project/outputs/data/cleaned_data_2023.csv")
+summary(marriage_data_2023$Marriages)
+sum(marriage_data_2023$Marriages)
+```
 
+2023 is similar to 2022 in terms of the general pattern of increases and decreases in the number of marriage licenses obtained (@fig-2023_marriages). Once again January is the min and a large increase from 517 to 929 takes place between February and March. This increase continues until it hits 1507 licenses in May where it levels off. August is the max with 1649 licenses. The decrease like 2022, starts in September and continues until November.
 
+$$
+Total\ Marriages\ Warm\ Months\ 2022\\
 
+\\
+Average=
+\\
+Total\ Marriages\ Cold\ Months\ 2022\\
+
+\\
+Average=
+\\
+$$
 
 # Discussion
+## Summary Statistics
+### 2022
+Examining marriage licenses data from 2022, we find a max of 1658, min of 472, and average of 1028, for a combined total of 12334 licenses.
 
-## First discussion point {#sec-first-point}
 
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this. 
+### 2023
+In 2023, there was a max of 1649, min of 563, mean of 1058.8, and total of 12706 marriage licenses issued. 
+```{r}
+#| echo: false
+#| message: false
+#| include: false
+marriage_data_2023 <- read_csv("/cloud/project/outputs/data/cleaned_data_2023.csv")
+summary(marriage_data_2023$Marriages)
+sum(marriage_data_2023$Marriages)
+```
+
+
+### Both Years
+Compared with the 2022 data, the total number of marriage licenses changed by $(12334-12706)/12706 = −0.0292\approx-2.92\%$. This small amount of change indicates that approximately the same number of couples get married in Toronto each year, so any increases in the number of marriages for any given month is unlikely to be attributable to a total increase in marriages.
 
 ## Second discussion point
 
@@ -102,26 +193,6 @@ If my paper were 10 pages, then should be be at least 2.5 pages. The discussion 
 Weaknesses and next steps should also be included.
 
 \newpage
-
-\appendix
-
-# Appendix {-}
-
-
-# Additional data details
-
-# Model details {#sec-model-details}
-
-## Posterior predictive check
-
-In @fig-ppcheckandposteriorvsprior-1 we implement a posterior predictive check. This shows...
-
-In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. This shows... 
-
-
-
-\newpage
-
 
 # References
 
