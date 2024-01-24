@@ -18,10 +18,10 @@ simulated_marriage_data <-
   tibble(
     Month = 
       format(
-        seq(as.Date("2023/1/1"), by = "month", length.out = 12), format="%B"
+        seq(as.Date("2023/1/1"), by = "month", length.out = 12), format="%Y%B%d"
         ),
     Marriages =
-      round(runif(n = 12, min = 0, max = 1758))
+      round(runif(n = 12, min = 0, max = 2000))
   )
 # simulate deviations from an uniform distribution of the number of marriage
 # licenses obtained in Toronto over 12 months
@@ -30,7 +30,7 @@ simulated_marriage_data
 
 #### Test Simulated Data ####
 simulated_marriage_data$Marriages |> min() >= 0
-simulated_marriage_data$Marriages |> max() <= 1758
+simulated_marriage_data$Marriages |> max() <= 2000
 simulated_marriage_data$Marriages |> class() == 'numeric'
 simulated_marriage_data$Month |> class() == 'character'
 
