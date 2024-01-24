@@ -31,6 +31,7 @@ cleaned_marriages_data <-
   cleaned_marriages_data |>
   rename(Date = TIME_PERIOD, Marriages = MARRIAGE_LICENSES) |>
   select(Date, Marriages)
+head(cleaned_marriages_data)
 
 cleaned_marriages_all_years <-
   cleaned_marriages_data |>
@@ -42,13 +43,15 @@ head(cleaned_marriages_data_all_years)
 cleaned_marriages_data_2022 <-
   cleaned_marriages_data |>
   filter(Date >= as.Date("2022-01-01"), Date <= as.Date("2022-12-31"))
-cleaned_marriages_data_2022$Date <- format(cleaned_marriages_data_2022$Date, format = "%Y-%B-%d")
+cleaned_marriages_data_2022$Date <- format(as.Date(
+  cleaned_marriages_data_2022$Date), format = "%Y-%B-%d")
 head(cleaned_marriages_data_2022)
 
 cleaned_marriages_data_2023 <-
   cleaned_marriages_data |>
   filter(Date >= as.Date("2023-01-01"), Date <= as.Date("2023-12-31"))
-cleaned_marriages_data_2023$Date <- format(cleaned_marriages_data_2023$Date, format = "%Y-%B-%d")
+cleaned_marriages_data_2023$Date <- format(as.Date(
+  cleaned_marriages_data_2023$Date), format = "%Y-%B-%d")
 head(cleaned_marriages_data_2023)
 
 
@@ -56,3 +59,4 @@ head(cleaned_marriages_data_2023)
 write_csv(cleaned_marriages_data, "outputs/data/cleaned_data_all_years.csv")
 write_csv(cleaned_marriages_data_2022, "outputs/data/cleaned_data_2022.csv")
 write_csv(cleaned_marriages_data_2023, "outputs/data/cleaned_data_2023.csv")
+
