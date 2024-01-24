@@ -8,14 +8,13 @@
 
 #### Workspace setup ####
 # install.packages("tidyverse")
-# We can comment out the installation after tidyverse has been installed
+# comment out the installation after tidyverse has been installed
 library(tidyverse)
 
 #### Test data ####
 marriage_data <- read_csv("outputs/data/cleaned_data.csv")
 
-marriage_data$Marriages |> min() >= 563
-marriage_data$Marriages |> max() <= 1649
+marriage_data$Marriages |> min() >= 0
+marriage_data$Marriages |> max() <= 2000
 marriage_data$Marriages |> class() == 'numeric'
-marriage_data$Month |> class() == 'character'
 

@@ -205,7 +205,7 @@ Prospective couples should consider the trend of higher volume marriage license 
 
 
 ## Weaknesses and Next Steps
-A weakness in our analysis is the small quantity of data that was used to come to our conclusion. While the pattern of increased marriage licenses was present in both 2022 and 2023, this might not have been the case in prior years. Performing the same analysis on years 2011 to 2021 will confirm our results.
+A weakness in my analysis is the small quantity of data that was used to come to our conclusion. While the pattern of increased marriage licenses was present in both 2022 and 2023, this might not have been the case in prior years. Performing the same analysis on years 2011 to 2021 will confirm our results.
 
 Both years have not only warm monhs where the number of marriage licenses is high and cold months where it is low, but also in between seasons when the number is increasing or decreasing. The analysis could be more nuanced if it had divided the year into 4 instead of 2 by including spring and autumn.
 
