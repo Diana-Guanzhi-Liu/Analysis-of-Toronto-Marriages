@@ -87,10 +87,13 @@ In order to determine if there is a difference in the amount of marriage license
 #| warning: false
 marriage_data <- read_csv("/cloud/project/outputs/data/cleaned_data_2022.csv")
 
+marriage_data$Date <- factor(marriage_data$Date, levels = unique(marriage_data$Date))
+
 marriage_data |>
   ggplot(aes(x = Date, y = Marriages, label = Marriages)) +
   geom_point() +
   geom_text(hjust=0, vjust=0) +
+  scale_x_discrete(breaks=c("2022-January-01","2022-April-01","2022-July-01", "2022-October-01")) +
   theme(axis.text.x = element_text(angle = 0, vjust = 0.5)) +
   labs(x = "Month", y = "Marriages", color = "Country")
 ```
@@ -130,10 +133,13 @@ $$
 #| warning: false
 marriage_data <- read_csv("/cloud/project/outputs/data/cleaned_data_2023.csv")
 
+marriage_data$Date <- factor(marriage_data$Date, levels = unique(marriage_data$Date))
+
 marriage_data |>
   ggplot(aes(x = Date, y = Marriages, label = Marriages)) +
   geom_point() +
   geom_text(hjust=0, vjust=0) +
+  scale_x_discrete(breaks=c("2022-January-01","2022-April-01","2022-July-01", "2022-October-01")) +
   theme(axis.text.x = element_text(angle = 0, vjust = 0.5)) +
   labs(x = "Month", y = "Marriages", color = "Country")
 ```
@@ -176,14 +182,16 @@ The results indicate that our hypothesis is correct. There are more marriage lic
 #| warning: false
 marriage_data <- read_csv("/cloud/project/outputs/data/cleaned_data_all_years.csv")
 
+marriage_data$Date <- factor(marriage_data$Date, levels = unique(marriage_data$Date))
+
 marriage_data |>
   ggplot(aes(x = Date, y = Marriages, label = Marriages)) +
   geom_point() +
-  geom_path(color = 'red') +
   theme(axis.text.x = element_text(angle = 0, vjust = 0.5)) +
+  scale_x_discrete(breaks=c("2022-January-01","2022-June-01","2023-January-01", "2023-June-01")) +
   labs(x = "Month", y = "Marriages", color = "Country")
 ```
-Combining both years, we generate another graph to plot the number of marriage licenses and connect the points with a line so the trend over time is easier to see. It is important to note that the line only connect the points and do not represent the rate of change. This cyclical nature of more marriage licenses obtained in warm months is evident (@fig-marriages)
+Finally, I plotted both 2022 and 2023 together so the trend over time is easier to see. This cyclical nature of more marriage licenses obtained in warm months is evident (@fig-marriages).
 
 # Discussion
 ## Findings

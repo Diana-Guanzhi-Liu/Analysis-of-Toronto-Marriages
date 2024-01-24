@@ -56,7 +56,7 @@ head(cleaned_marriages_data_2023)
 
 
 #### Save data ####
-write_csv(cleaned_marriages_data, "outputs/data/cleaned_data_all_years.csv")
+write_csv(cleaned_marriages_data_all_years, "outputs/data/cleaned_data_all_years.csv")
 write_csv(cleaned_marriages_data_2022, "outputs/data/cleaned_data_2022.csv")
 write_csv(cleaned_marriages_data_2023, "outputs/data/cleaned_data_2023.csv")
 
