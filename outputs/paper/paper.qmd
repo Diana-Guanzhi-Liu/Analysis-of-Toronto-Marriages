@@ -44,7 +44,7 @@ I selected only 2022 and 2023 due to some 2021 data being missing and the fact t
 #| echo: false
 #| message: false
 
-raw_marriage_data <- read_csv("/cloud/project/inputs/data/unedited_data.csv")
+raw_marriage_data <- read_csv("/inputs/data/unedited_data.csv")
 gt(head(raw_marriage_data))
 
 ```
@@ -68,7 +68,7 @@ TIME_PERIOD is the month in which the marriage licenses were obtained in a yyyy-
 #| echo: false
 #| message: false
 
-cleaned_marriage_data_2022 <- read_csv("/cloud/project/outputs/data/cleaned_data_2022.csv")
+cleaned_marriage_data_2022 <- read_csv("/outputs/data/cleaned_data_2022.csv")
 gt(head(cleaned_marriage_data_2022))
 ```
 After the data I need has been cleaned, it is saved into 3 .csv files, one for 2022, another for 2023, and the third contains both years. The only columns that remain in any file are Date and Marriages (@fig-cleaned_toronto_marriages_2022).
@@ -85,7 +85,7 @@ In order to determine if there is a difference in the amount of marriage license
 #| message: false
 #| eval: true
 #| warning: false
-marriage_data <- read_csv("/cloud/project/outputs/data/cleaned_data_2022.csv")
+marriage_data <- read_csv("/outputs/data/cleaned_data_2022.csv")
 
 marriage_data$Date <- factor(marriage_data$Date, levels = unique(marriage_data$Date))
 
@@ -101,7 +101,7 @@ marriage_data |>
 #| echo: false
 #| message: false
 #| include: false
-marriage_data_2022 <- read_csv("/cloud/project/outputs/data/cleaned_data_2022.csv")
+marriage_data_2022 <- read_csv("/outputs/data/cleaned_data_2022.csv")
 summary(marriage_data_2022$Marriages)
 sum(marriage_data_2022$Marriages)
 ```
@@ -131,7 +131,7 @@ $$
 #| message: false
 #| eval: true
 #| warning: false
-marriage_data <- read_csv("/cloud/project/outputs/data/cleaned_data_2023.csv")
+marriage_data <- read_csv("/outputs/data/cleaned_data_2023.csv")
 
 marriage_data$Date <- factor(marriage_data$Date, levels = unique(marriage_data$Date))
 
@@ -148,7 +148,7 @@ marriage_data |>
 #| echo: false
 #| message: false
 #| include: false
-marriage_data_2023 <- read_csv("/cloud/project/outputs/data/cleaned_data_2023.csv")
+marriage_data_2023 <- read_csv("/outputs/data/cleaned_data_2023.csv")
 summary(marriage_data_2023$Marriages)
 sum(marriage_data_2023$Marriages)
 ```
@@ -178,7 +178,7 @@ The results indicate that the hypothesis is correct. There are more marriage lic
 #| message: false
 #| eval: true
 #| warning: false
-marriage_data <- read_csv("/cloud/project/outputs/data/cleaned_data_all_years.csv")
+marriage_data <- read_csv("/outputs/data/cleaned_data_all_years.csv")
 
 marriage_data$Date <- factor(marriage_data$Date, levels = unique(marriage_data$Date))
 
